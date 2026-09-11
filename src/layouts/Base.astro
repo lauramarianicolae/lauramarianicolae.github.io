@@ -1,0 +1,67 @@
+---
+import '../styles/global.css';
+import { getEntry } from 'astro:content';
+import { getImage } from 'astro:assets';
+import { copyButton } from '../lib/copy-button';
+
+const site = (await getEntry('site', 'site'))!.data;
+const origin = Astro.site ?? new URL('http://localhost:4321/');
+const canonical = new URL('/', origin).href;
+const photoLarge = await getImage({ src: site.photo, width: 819, format: 'jpg', quality: 82 });
+const ogImage = new URL(photoLarge.src, origin).href;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: site.name,
+  jobTitle: site.title,
+  affiliation: { '@type': 'CollegeOrUniversity', name: site.affiliation },
+  email: `mailto:${site.email}`,
+  url: canonical,
+  image: ogImage,
+  knowsAbout: site.topics,
+};
+const year = new Date().getFullYear();
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#f9fafb">
+  <title>{site.name}</title>
+  <meta name="description" content={site.description}>
+  <link rel="canonical" href={canonical}>
+
+  <meta property="og:type" content="profile">
+  <meta property="og:title" content={site.name}>
+  <meta property="og:description" content={site.ogDescription}>
+  <meta property="og:url" content={canonical}>
+  <meta property="og:image" content={ogImage}>
+
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="/assets/fonts/newsreader-upright-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+</head>
+<body id="top">
+  <header class="bar" data-bar>
+    <div class="bar__inner">
+      <a class="bar__name" href="#top">{site.name}</a>
+      <nav class="bar__links" aria-label="Contact">
+        <a href={site.cv}>CV</a>
+        <span class="bar__email"><a href={`mailto:${site.email}`}><span class="long">{site.email}</span><span class="short">Email</span></a><Fragment set:html={copyButton(site.email)} /></span>
+      </nav>
+    </div>
+  </header>
+
+  <slot />
+
+  <footer>
+    © {year} {site.name} · <span class="thanks">{site.thanks.map((t, i) => <span lang={t.lang} aria-hidden={i > 0 ? 'true' : undefined}>{t.text}</span>)}</span>
+  </footer>
+
+  <script>import '../scripts/site.js';</script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+---
+import { render } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props { paper: CollectionEntry<'papers'> }
+const { paper } = Astro.props;
+const d = paper.data;
+const { Content } = await render(paper);
+
+const fmt = (date: Date) =>
+  date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+
+const links = [
+  ...(d.pdf ? [{ label: d.type === 'publication' ? 'Paper' : 'Draft', url: d.pdf }] : []),
+  ...d.links,
+];
+const hasDetail = Boolean(d.updated || d.venue || links.length);
+const showMeta = d.jmp || hasDetail || Boolean(d.status);
+---
+<article class="paper">
+  <h3>{d.title}</h3>
+  {d.coauthors && <p class="meta">with {d.coauthors}</p>}
+  {showMeta && (
+    <p class="meta">{d.jmp && <span class="jmp">Job Market Paper.</span>}{d.jmp && ' '}{
+      [
+        d.updated && `Last updated ${fmt(d.updated)}`,
+        d.venue && <><cite>{d.venue}</cite>{d.venueDate ? `, ${d.venueDate}` : ''}</>,
+        ...links.map((l) => <a href={l.url}>{l.label}</a>),
+      ].filter(Boolean).map((part, i) => <>{i > 0 && ' · '}{part}</>)
+    }{!hasDetail && d.status}</p>
+  )}
+  <details>
+    <summary>Abstract</summary>
+    <Content />
+  </details>
+</article>

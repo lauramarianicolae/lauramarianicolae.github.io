@@ -1,0 +1,87 @@
+---
+import Base from '../layouts/Base.astro';
+import Paper from '../components/Paper.astro';
+import { getCollection, getEntry, render } from 'astro:content';
+import { getImage } from 'astro:assets';
+import { copyButton } from '../lib/copy-button';
+
+const site = (await getEntry('site', 'site'))!.data;
+const byOrder = (a: { data: { order: number } }, b: { data: { order: number } }) => a.data.order - b.data.order;
+const byId = (a: { id: string }, b: { id: string }) => Number(a.id) - Number(b.id);
+
+const papers = (await getCollection('papers')).sort(byOrder);
+const working = papers.filter((p) => p.data.type === 'working-paper');
+const published = papers.filter((p) => p.data.type === 'publication');
+const teaching = (await getCollection('teaching')).sort(byId);
+const awards = (await getCollection('awards')).sort(byId);
+const { Content: Bio } = await render((await getEntry('prose', 'bio'))!);
+const { Content: Languages } = await render((await getEntry('prose', 'languages'))!);
+
+const photo480 = await getImage({ src: site.photo, width: 480, format: 'jpg', quality: 82 });
+const photo819 = await getImage({ src: site.photo, width: 819, format: 'jpg', quality: 82 });
+---
+<Base>
+  <main>
+
+    <header class="intro">
+      <img class="photo"
+           src={photo480.src}
+           srcset={`${photo480.src} 480w, ${photo819.src} 819w`}
+           sizes="(max-width: 40rem) 13rem, 16rem" width={photo480.attributes.width} height={photo480.attributes.height}
+           alt={site.photoAlt}>
+      <div>
+        <h1>{site.name}</h1>
+        <p class="title">{site.title}<br>{site.affiliation}</p>
+        {site.fields.length > 0 && <p class="fields">Fields: {site.fields.join(', ')}</p>}
+        <p class="contact"><a href={`mailto:${site.email}`}>{site.email}</a><Fragment set:html={copyButton(site.email)} /><br><a href={site.cv}>Curriculum Vitae</a></p>
+        <span class="sr-only" role="status" aria-live="polite" data-copy-status></span>
+      </div>
+    </header>
+
+    <section class="bio">
+      <Bio />
+    </section>
+
+    {working.length > 0 && (
+      <section>
+        <h2>Working Papers</h2>
+        {working.map((p) => <Paper paper={p} />)}
+      </section>
+    )}
+
+    {published.length > 0 && (
+      <section>
+        <h2>Publications</h2>
+        {published.map((p) => <Paper paper={p} />)}
+      </section>
+    )}
+
+    {teaching.length > 0 && (
+      <section>
+        <h2>Teaching</h2>
+        <ul class="list">
+          {teaching.map(({ data: t }) => (
+            <li><span class="what">{t.course}{t.level && ` (${t.level})`}</span><span class="when">{t.term}</span><span class="sub">{t.role} for {t.instructor}</span></li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    {awards.length > 0 && (
+      <section>
+        <h2>Fellowships and Awards</h2>
+        <ul class="list">
+          {awards.map(({ data: a }) => (
+            <li><span class="what">{a.name}</span><span class="when">{a.year}</span>{a.detail && <span class="sub">{a.detail}</span>}</li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    <section>
+      <h2>Languages</h2>
+      <Languages />
+    </section>
+
+  </main>
+</Base>

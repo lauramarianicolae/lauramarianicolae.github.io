@@ -1,0 +1,30 @@
+name: Laura Nicolae
+title: Ph.D. Candidate in Business Economics
+affiliation: Harvard University
+email: lauranicolae@g.harvard.edu
+cv: /Nicolae_Laura_CV.pdf
+fields:
+  - Financial Economics
+  - Macroeconomics
+photo: ./images/laura-nicolae.jpg
+photoAlt: Portrait of Laura Nicolae
+description: Laura Nicolae, Ph.D. candidate in Business Economics at Harvard. Research in banking, monetary policy, and macroeconomics. On the 2026–2027 job market.
+ogDescription: Ph.D. Candidate in Business Economics, Harvard University. On the 2026–2027 job market.
+topics:
+  - Banking
+  - Monetary policy
+  - Macroeconomics
+  - Financial economics
+thanks:
+  - lang: en
+    text: Thank you
+  - lang: ro
+    text: Mulțumesc
+  - lang: es
+    text: Gracias
+  - lang: fr
+    text: Merci
+  - lang: pt
+    text: Obrigada
+  - lang: zh-Hans
+    text: 谢谢
