@@ -32,7 +32,7 @@ const photo819 = await getImage({ src: site.photo, width: 819, format: 'jpg', qu
       <div>
         <h1>{site.name}</h1>
         <p class="title">{site.title}<br>{site.affiliation}</p>
-        {site.fields.length > 0 && <p class="fields">Fields: {site.fields.join(', ')}</p>}
+        {site.researchFields.length > 0 && <p class="fields">Fields: {site.researchFields.join(', ')}</p>}
         <p class="contact"><a href={`mailto:${site.email}`}>{site.email}</a><Fragment set:html={copyButton(site.email)} /><br><a href={site.cv}>Curriculum Vitae</a></p>
         <span class="sr-only" role="status" aria-live="polite" data-copy-status></span>
       </div>

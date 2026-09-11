@@ -1,0 +1,218 @@
+media:
+  - name: papers
+    label: Paper PDFs
+    input: public/papers
+    output: /papers
+    extensions: [pdf]
+  - name: cv
+    label: CV
+    input: public
+    output: /
+    extensions: [pdf]
+
+content:
+  - name: papers
+    label: Papers
+    type: collection
+    path: src/content/papers
+    format: yaml-frontmatter
+    filename: "{primary}.md"
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+      - name: type
+        label: Section
+        type: select
+        required: true
+        options:
+          values:
+            - name: working-paper
+              label: Working paper
+            - name: publication
+              label: Publication
+      - name: order
+        label: Position in the section
+        type: number
+        required: true
+        description: 1 shows first.
+      - name: jmp
+        label: Job market paper
+        type: boolean
+      - name: coauthors
+        label: Coauthors
+        type: string
+        description: Written after the word "with", exactly as it should read.
+      - name: status
+        label: Status note
+        type: string
+        description: Shown when there is no draft yet, e.g. "Draft coming soon."
+      - name: updated
+        label: Last updated
+        type: date
+        options:
+          format: yyyy-MM-dd
+      - name: venue
+        label: Journal
+        type: string
+      - name: venueDate
+        label: Journal issue
+        type: string
+        description: e.g. Spring 2024
+      - name: pdf
+        label: PDF
+        type: file
+        options:
+          media: papers
+          extensions: [pdf]
+      - name: links
+        label: Links
+        type: object
+        list:
+          collapsible:
+            summary: "{fields.label}"
+        fields:
+          - name: label
+            label: Label
+            type: string
+          - name: url
+            label: Address
+            type: string
+      - name: body
+        label: Abstract
+        type: rich-text
+
+  - name: bio
+    label: Bio
+    type: file
+    path: src/content/bio.md
+    format: yaml-frontmatter
+    fields:
+      - name: body
+        label: Bio
+        type: rich-text
+
+  - name: languages
+    label: Languages
+    type: file
+    path: src/content/languages.md
+    format: yaml-frontmatter
+    fields:
+      - name: body
+        label: Languages
+        type: rich-text
+
+  - name: teaching
+    label: Teaching
+    type: file
+    path: src/content/teaching.yaml
+    format: yaml
+    fields:
+      - name: courses
+        label: Courses
+        type: object
+        list:
+          collapsible:
+            summary: "{fields.course}"
+        fields:
+          - name: course
+            label: Course
+            type: string
+            required: true
+          - name: level
+            label: Level
+            type: string
+            description: e.g. undergraduate, MBA
+          - name: role
+            label: Role
+            type: string
+          - name: instructor
+            label: Instructor
+            type: string
+          - name: term
+            label: Term
+            type: string
+
+  - name: awards
+    label: Fellowships and Awards
+    type: file
+    path: src/content/awards.yaml
+    format: yaml
+    fields:
+      - name: awards
+        label: Awards
+        type: object
+        list:
+          collapsible:
+            summary: "{fields.name}"
+        fields:
+          - name: name
+            label: Name
+            type: string
+            required: true
+          - name: detail
+            label: Organization or note
+            type: string
+          - name: year
+            label: Year
+            type: string
+
+  - name: site
+    label: Name and contact
+    type: file
+    path: src/content/site.yaml
+    format: yaml
+    fields:
+      - name: name
+        label: Name
+        type: string
+      - name: title
+        label: Title
+        type: string
+      - name: affiliation
+        label: University
+        type: string
+      - name: email
+        label: Email
+        type: string
+      - name: cv
+        label: CV
+        type: file
+        options:
+          media: cv
+          extensions: [pdf]
+      - name: researchFields
+        label: Fields
+        type: string
+        list: true
+      - name: photo
+        label: Photo
+        type: string
+        readonly: true
+      - name: photoAlt
+        label: Photo description
+        type: string
+      - name: description
+        label: Search engine description
+        type: text
+      - name: ogDescription
+        label: Link preview description
+        type: text
+      - name: topics
+        label: Search engine topics
+        type: string
+        list: true
+      - name: thanks
+        label: Footer thank you
+        type: object
+        list:
+          collapsible:
+            summary: "{fields.text}"
+        fields:
+          - name: lang
+            label: Language code
+            type: string
+          - name: text
+            label: Text
+            type: string

@@ -60,7 +60,7 @@ const site = defineCollection({
       affiliation: z.string(),
       email: z.string(),
       cv: z.string(),
-      fields: z.array(z.string()).default([]),
+      researchFields: z.array(z.string()).default([]),
       photo: image(),
       photoAlt: z.string(),
       description: z.string(),
