@@ -8,8 +8,11 @@ researchFields:
   - Macroeconomics
 photo: ./images/laura-nicolae.jpg
 photoAlt: Portrait of Laura Nicolae
-description: Laura Nicolae, Ph.D. candidate in Business Economics at Harvard. Research in banking, monetary policy, and macroeconomics. On the 2026–2027 job market.
-ogDescription: Ph.D. Candidate in Business Economics, Harvard University. On the 2026–2027 job market.
+description: Laura Nicolae, Ph.D. candidate in Business Economics at Harvard.
+  Research in banking, monetary policy, and macroeconomics. On the 2026–2027 job
+  market.
+ogDescription: Ph.D. Candidate in Business Economics, Harvard University. On the
+  2026–2027 job market.
 topics:
   - Banking
   - Monetary policy
@@ -17,14 +20,14 @@ topics:
   - Financial economics
 thanks:
   - lang: en
-    text: Thank you
+    text: Hello!
   - lang: ro
-    text: Mulțumesc
+    text: Bună ziua!
   - lang: es
-    text: Gracias
+    text: Buenos días!
   - lang: fr
-    text: Merci
+    text: Bonjour !
   - lang: pt
-    text: Obrigada
+    text: Bom dia!
   - lang: zh-Hans
-    text: 谢谢
+    text: 你好
