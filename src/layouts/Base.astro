@@ -3,7 +3,7 @@ import '../styles/global.css';
 import { getEntry } from 'astro:content';
 import { getImage } from 'astro:assets';
 import { copyButton } from '../lib/copy-button';
-import { cvUrl } from '../lib/cv';
+import { cvUrl } from '../lib/urls';
 
 const site = (await getEntry('site', 'site'))!.data;
 const origin = Astro.site ?? new URL('http://localhost:4321/');

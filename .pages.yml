@@ -63,6 +63,7 @@ content:
       - name: pdf
         label: PDF
         type: file
+        description: Upload the new PDF here, select it, and save. Any file name works; for the job market paper the site always serves it at lauranicolae.com/Nicolae_JMP.pdf.
         options:
           media: papers
           extensions: [pdf]
