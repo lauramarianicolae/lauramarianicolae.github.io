@@ -1,13 +1,13 @@
 media:
-  - name: papers
-    label: Paper PDFs
-    input: public/papers
-    output: /papers
-    extensions: [pdf]
   - name: cv
     label: CV
     input: src/content/cv
     output: /cv
+    extensions: [pdf]
+  - name: papers
+    label: Paper PDFs
+    input: src/content/paper-pdfs
+    output: /paper-pdfs
     extensions: [pdf]
 
 content:
@@ -63,14 +63,14 @@ content:
       - name: pdf
         label: PDF
         type: file
-        description: Upload the new PDF here, select it, and save. Any file name works; the site always serves it at the permanent link below.
+        description: Easiest is Media, Paper PDFs, then the folder named after this paper's short name (JMP for the job market paper). The newest PDF there is live at the permanent link below. Uploading and selecting here works too.
         options:
           media: papers
           extensions: [pdf]
       - name: shortName
         label: Short name
         type: string
-        description: Set once when adding a paper and use a different one for each paper, e.g. Bank_Deposits. The PDF is then always at lauranicolae.com/papers/Nicolae_Bank_Deposits.pdf. The job market paper is always at lauranicolae.com/Nicolae_JMP.pdf. Changing this later changes the link.
+        description: Set once when adding a paper and use a different one for each paper, e.g. Bank_Deposits. The PDF is then always at lauranicolae.com/papers/Nicolae_Bank_Deposits.pdf, and its folder under Media, Paper PDFs uses the same name. The job market paper is always at lauranicolae.com/Nicolae_JMP.pdf. Changing this later changes the link.
       - name: links
         label: Links
         type: object
@@ -184,7 +184,7 @@ content:
       - name: cv
         label: CV
         type: file
-        description: Upload the new PDF here, select it, and save. Any file name works; the site always serves it at lauranicolae.com/Nicolae_Laura_CV.pdf.
+        description: Upload the new PDF here or under Media, CV. Any file name works. The newest upload is always live at lauranicolae.com/Nicolae_Laura_CV.pdf.
         options:
           media: cv
           extensions: [pdf]

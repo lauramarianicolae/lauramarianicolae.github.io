@@ -7,13 +7,34 @@ export const cvUrl = '/Nicolae_Laura_CV.pdf';
 export const jmpUrl = '/Nicolae_JMP.pdf';
 
 const papersDir = 'src/content/papers';
+const cvDir = 'src/content/cv';
+const paperPdfsDir = 'src/content/paper-pdfs';
 
 const committedAt = (path) => {
   try {
-    return Number(execFileSync('git', ['log', '-1', '--format=%ct', '--', path], { encoding: 'utf8' }).trim()) || 0;
+    return Number(execFileSync('git', ['log', '--follow', '--diff-filter=AM', '-1', '--format=%ct', '--', path], { encoding: 'utf8' }).trim()) || 0;
   } catch {
     return 0;
   }
+};
+
+const pdfsIn = (dir) =>
+  existsSync(dir) ? readdirSync(dir).filter((f) => f.toLowerCase().endsWith('.pdf')).sort().map((f) => join(dir, f)) : [];
+
+const folderFor = (name) => {
+  if (!existsSync(paperPdfsDir)) return undefined;
+  const dir = readdirSync(paperPdfsDir, { withFileTypes: true })
+    .filter((d) => d.isDirectory())
+    .map((d) => d.name)
+    .sort()
+    .find((d) => cleanName(d).toLowerCase() === name.toLowerCase());
+  return dir && join(paperPdfsDir, dir);
+};
+
+const fieldFile = (pdf) => {
+  if (!pdf) return undefined;
+  const value = String(pdf).replace(/^\/+/, '');
+  return value.startsWith('paper-pdfs/') ? join('src/content', value) : join('public/papers', basename(value));
 };
 
 const frontmatter = (path) => parse(readFileSync(path, 'utf8').split(/^---\s*$/m)[1] ?? '') ?? {};
@@ -35,22 +56,26 @@ const served = () => {
     .map((file) => ({ file, data: frontmatter(join(papersDir, file)) }))
     .sort((a, b) => Number(Boolean(b.data.jmp)) - Number(Boolean(a.data.jmp)));
   const paperEntries = papers.map(({ file, data }, i) => {
-    const cms = data.pdf && join('public/papers', basename(data.pdf));
-    if (data.jmp && i === 0) return { file, url: jmpUrl, cms };
-    const names = [data.shortName, basename(file, '.md')].filter(Boolean).map(cleanName).filter(Boolean);
-    let url = names.map((n) => `/papers/Nicolae_${n}.pdf`).find((u) => !taken.has(u));
-    for (let n = 2; !url; n++) {
-      const candidate = `/papers/Nicolae_${names.at(-1)}_${n}.pdf`;
-      if (!taken.has(candidate)) url = candidate;
+    const field = fieldFile(data.pdf);
+    if (data.jmp && i === 0) {
+      const folder = folderFor('JMP');
+      return { file, url: jmpUrl, candidates: [field, ...(folder ? pdfsIn(folder) : [])] };
     }
+    const names = [data.shortName, basename(file, '.md')].filter(Boolean).map(cleanName).filter(Boolean);
+    let name = names.find((n) => !taken.has(`/papers/Nicolae_${n}.pdf`));
+    for (let n = 2; !name; n++) {
+      if (!taken.has(`/papers/Nicolae_${names.at(-1)}_${n}.pdf`)) name = `${names.at(-1)}_${n}`;
+    }
+    const url = `/papers/Nicolae_${name}.pdf`;
     taken.add(url);
-    return { file, url, cms };
+    const folder = folderFor(name);
+    return { file, url, candidates: [field, ...(folder ? pdfsIn(folder) : [])] };
   });
-  return [{ url: cvUrl, cms: cv && join('src/content/cv', basename(cv)) }, ...paperEntries];
+  return [{ url: cvUrl, candidates: [cv && join(cvDir, basename(cv)), ...pdfsIn(cvDir)] }, ...paperEntries];
 };
 
 export const pdfSource = (url) =>
-  [served().find((s) => s.url === url)?.cms, join('public', url)]
+  [...(served().find((s) => s.url === url)?.candidates ?? []), join('public', url)]
     .filter((p) => p && existsSync(p))
     .sort((a, b) => committedAt(b) - committedAt(a))[0];
 
