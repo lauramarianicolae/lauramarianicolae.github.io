@@ -4,7 +4,7 @@ import Paper from '../components/Paper.astro';
 import { getCollection, getEntry, render } from 'astro:content';
 import { getImage } from 'astro:assets';
 import { copyButton } from '../lib/copy-button';
-import { cvUrl, jmpUrl } from '../lib/urls';
+import { cvUrl, jmpUrl, pdfSource } from '../lib/pdfs.mjs';
 
 const site = (await getEntry('site', 'site'))!.data;
 const byOrder = (a: { data: { order: number } }, b: { data: { order: number } }) => a.data.order - b.data.order;
@@ -12,7 +12,7 @@ const byId = (a: { id: string }, b: { id: string }) => Number(a.id) - Number(b.i
 
 const papers = (await getCollection('papers')).sort(byOrder);
 const jmp = papers.find((p) => p.data.jmp);
-const jmpHref = jmp?.data.pdf ? jmpUrl : jmp?.data.links[0]?.url ?? '#jmp';
+const jmpHref = jmp && pdfSource(jmpUrl) ? jmpUrl : jmp?.data.links[0]?.url ?? '#jmp';
 const working = papers.filter((p) => p.data.type === 'working-paper');
 const published = papers.filter((p) => p.data.type === 'publication');
 const teaching = (await getCollection('teaching')).sort(byId);

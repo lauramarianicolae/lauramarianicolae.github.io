@@ -1,7 +1,7 @@
 ---
 import { render } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
-import { jmpUrl } from '../lib/urls';
+import { jmpUrl, pdfSource } from '../lib/pdfs.mjs';
 
 interface Props { paper: CollectionEntry<'papers'> }
 const { paper } = Astro.props;
@@ -12,7 +12,9 @@ const fmt = (date: Date) =>
   date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
 
 const links = [
-  ...(d.pdf ? [{ label: d.type === 'publication' ? 'Paper' : 'Draft', url: d.jmp ? jmpUrl : d.pdf }] : []),
+  ...(d.jmp
+    ? pdfSource(jmpUrl) ? [{ label: 'Draft', url: jmpUrl }] : []
+    : d.pdf ? [{ label: d.type === 'publication' ? 'Paper' : 'Draft', url: d.pdf }] : []),
   ...d.links,
 ];
 const hasDetail = Boolean(d.updated || d.venue || links.length);
