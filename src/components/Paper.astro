@@ -1,7 +1,8 @@
 ---
 import { render } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
-import { jmpUrl, pdfSource } from '../lib/pdfs.mjs';
+import { basename } from 'node:path';
+import { paperPdfUrl } from '../lib/pdfs.mjs';
 
 interface Props { paper: CollectionEntry<'papers'> }
 const { paper } = Astro.props;
@@ -11,10 +12,9 @@ const { Content } = await render(paper);
 const fmt = (date: Date) =>
   date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
 
+const pdfUrl = paperPdfUrl(basename(paper.filePath ?? `${paper.id}.md`));
 const links = [
-  ...(d.jmp
-    ? pdfSource(jmpUrl) ? [{ label: 'Draft', url: jmpUrl }] : []
-    : d.pdf ? [{ label: d.type === 'publication' ? 'Paper' : 'Draft', url: d.pdf }] : []),
+  ...(pdfUrl ? [{ label: d.type === 'publication' ? 'Paper' : 'Draft', url: pdfUrl }] : []),
   ...d.links,
 ];
 const hasDetail = Boolean(d.updated || d.venue || links.length);

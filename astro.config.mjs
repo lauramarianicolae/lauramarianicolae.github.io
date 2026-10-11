@@ -1,6 +1,8 @@
 import { defineConfig } from 'astro/config';
-import { copyFileSync } from 'node:fs';
-import { cvUrl, jmpUrl, pdfSource } from './src/lib/pdfs.mjs';
+import { copyFileSync, mkdirSync } from 'node:fs';
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { pdfSource, servedUrls } from './src/lib/pdfs.mjs';
 
 export default defineConfig({
   site: 'https://lauranicolae.com',
@@ -9,9 +11,12 @@ export default defineConfig({
       name: 'pdfs',
       hooks: {
         'astro:build:done': ({ dir }) => {
-          for (const url of [cvUrl, jmpUrl]) {
+          for (const url of servedUrls()) {
             const source = pdfSource(url);
-            if (source) copyFileSync(source, new URL(url.slice(1), dir));
+            if (!source) continue;
+            const target = fileURLToPath(new URL(url.slice(1), dir));
+            mkdirSync(dirname(target), { recursive: true });
+            copyFileSync(source, target);
           }
         },
       },

@@ -63,10 +63,14 @@ content:
       - name: pdf
         label: PDF
         type: file
-        description: Upload the new PDF here, select it, and save. Any file name works; for the job market paper the site always serves it at lauranicolae.com/Nicolae_JMP.pdf.
+        description: Upload the new PDF here, select it, and save. Any file name works; the site always serves it at the permanent link below.
         options:
           media: papers
           extensions: [pdf]
+      - name: shortName
+        label: Short name
+        type: string
+        description: Set once when adding a paper and use a different one for each paper, e.g. Bank_Deposits. The PDF is then always at lauranicolae.com/papers/Nicolae_Bank_Deposits.pdf. The job market paper is always at lauranicolae.com/Nicolae_JMP.pdf. Changing this later changes the link.
       - name: links
         label: Links
         type: object

@@ -22,6 +22,7 @@ const papers = defineCollection({
     venue: z.string().optional(),
     venueDate: text.optional(),
     pdf: z.string().optional(),
+    shortName: z.string().optional(),
     links: z.array(z.object({ label: z.string(), url: z.string() })).default([]),
   }),
 });
