@@ -3,6 +3,7 @@ import '../styles/global.css';
 import { getEntry } from 'astro:content';
 import { getImage } from 'astro:assets';
 import { copyButton } from '../lib/copy-button';
+import { cvUrl } from '../lib/cv';
 
 const site = (await getEntry('site', 'site'))!.data;
 const origin = Astro.site ?? new URL('http://localhost:4321/');
@@ -50,7 +51,7 @@ const year = new Date().getFullYear();
     <div class="bar__inner">
       <a class="bar__name" href="#top">{site.name}</a>
       <nav class="bar__links" aria-label="Contact">
-        <a href={site.cv}>CV</a>
+        <a href={cvUrl}>CV</a>
         <span class="bar__email"><a href={`mailto:${site.email}`}><span class="long">{site.email}</span><span class="short">Email</span></a><Fragment set:html={copyButton(site.email)} /></span>
       </nav>
     </div>

@@ -6,8 +6,8 @@ media:
     extensions: [pdf]
   - name: cv
     label: CV
-    input: public
-    output: /
+    input: src/content/cv
+    output: /cv
     extensions: [pdf]
 
 content:
@@ -179,6 +179,7 @@ content:
       - name: cv
         label: CV
         type: file
+        description: Upload the new PDF here, select it, and save. Any file name works; the site always serves it at lauranicolae.com/Nicolae_Laura_CV.pdf.
         options:
           media: cv
           extensions: [pdf]
