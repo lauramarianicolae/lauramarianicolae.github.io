@@ -5,6 +5,8 @@ import { getImage } from 'astro:assets';
 import { copyButton } from '../lib/copy-button';
 import { cvUrl } from '../lib/pdfs.mjs';
 
+interface Props { notFound?: boolean }
+const { notFound = false } = Astro.props;
 const site = (await getEntry('site', 'site'))!.data;
 const origin = Astro.site ?? new URL('http://localhost:4321/');
 const canonical = new URL('/', origin).href;
@@ -31,7 +33,8 @@ const year = new Date().getFullYear();
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light">
   <meta name="theme-color" content="#f9fafb">
-  <title>{site.name}</title>
+  <title>{notFound ? `Page not found | ${site.name}` : site.name}</title>
+  {notFound ? <meta name="robots" content="noindex"> : <>
   <meta name="description" content={site.description}>
   <link rel="canonical" href={canonical}>
 
@@ -40,16 +43,17 @@ const year = new Date().getFullYear();
   <meta property="og:description" content={site.ogDescription}>
   <meta property="og:url" content={canonical}>
   <meta property="og:image" content={ogImage}>
+  </>}
 
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="preload" href="/assets/fonts/newsreader-upright-latin.woff2" as="font" type="font/woff2" crossorigin>
 
-  <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  {!notFound && <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
 </head>
 <body id="top">
-  <header class="bar" data-bar>
+  <header class:list={['bar', { 'is-visible': notFound }]} data-bar={notFound ? undefined : ''}>
     <div class="bar__inner">
-      <a class="bar__name" href="#top">{site.name}</a>
+      <a class="bar__name" href={notFound ? '/' : '#top'}>{site.name}</a>
       <nav class="bar__links" aria-label="Contact">
         <a href={cvUrl}>CV</a>
         <span class="bar__email"><a href={`mailto:${site.email}`}><span class="long">{site.email}</span><span class="short">Email</span></a><Fragment set:html={copyButton(site.email)} /></span>

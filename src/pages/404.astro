@@ -1,0 +1,30 @@
+---
+import Base from '../layouts/Base.astro';
+import { jmpUrl, pdfSource } from '../lib/pdfs.mjs';
+
+const jmpPending = !pdfSource(jmpUrl);
+const arrow = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>';
+---
+<Base notFound>
+  <main class="missing">
+    <div data-missing>
+      <h1>Page not found</h1>
+      <a class="go" href="/">Go to homepage<Fragment set:html={arrow} /></a>
+    </div>
+    {jmpPending && (
+      <div data-jmp-pending hidden>
+        <h1>Draft coming soon</h1>
+        <a class="go" href="/#jmp">Read the abstract<Fragment set:html={arrow} /></a>
+      </div>
+    )}
+  </main>
+  {jmpPending && (
+    <script is:inline define:vars={{ jmpUrl }}>
+      if (location.pathname.toLowerCase() === jmpUrl.toLowerCase()) {
+        document.querySelector('[data-missing]').hidden = true;
+        document.querySelector('[data-jmp-pending]').hidden = false;
+        document.title = document.title.replace('Page not found', 'Draft coming soon');
+      }
+    </script>
+  )}
+</Base>
