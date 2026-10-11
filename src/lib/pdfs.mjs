@@ -12,7 +12,12 @@ const paperPdfsDir = 'src/content/paper-pdfs';
 
 const committedAt = (path) => {
   try {
-    return Number(execFileSync('git', ['log', '--follow', '--diff-filter=AM', '-1', '--format=%ct', '--', path], { encoding: 'utf8' }).trim()) || 0;
+    const blob = execFileSync('git', ['hash-object', path], { encoding: 'utf8' }).trim();
+    const times = execFileSync('git', ['log', '--format=%ct', `--find-object=${blob}`], { encoding: 'utf8' })
+      .split('\n')
+      .map(Number)
+      .filter(Boolean);
+    return times.length ? Math.min(...times) : 0;
   } catch {
     return 0;
   }
