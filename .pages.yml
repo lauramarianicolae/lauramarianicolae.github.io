@@ -63,7 +63,7 @@ content:
       - name: pdf
         label: PDF
         type: file
-        description: Easiest is Media, Paper PDFs, then the folder named after this paper's short name (JMP for the job market paper). The newest PDF there is live at the permanent link below. Uploading and selecting here works too.
+        description: To post a new version, remove the current file, upload the new PDF, select it, and save. Any file name works; it's always at the permanent link below. Uploading under Media, Paper PDFs, in the folder named after the short name, also works.
         options:
           media: papers
           extensions: [pdf]
@@ -184,7 +184,7 @@ content:
       - name: cv
         label: CV
         type: file
-        description: Upload the new PDF here or under Media, CV. Any file name works. The newest upload is always live at lauranicolae.com/Nicolae_Laura_CV.pdf.
+        description: To replace it, remove the current file, upload the new PDF, select it, and save. Any file name works. It's always at lauranicolae.com/Nicolae_Laura_CV.pdf. To go back to an older version, select that file and save.
         options:
           media: cv
           extensions: [pdf]

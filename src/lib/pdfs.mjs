@@ -23,6 +23,16 @@ const committedAt = (path) => {
   }
 };
 
+const changedAt = (file, key) => {
+  try {
+    return Number(execFileSync('git', ['log', '-1', '--format=%ct', `-G^${key}:`, '--', file], { encoding: 'utf8' }).trim()) || 0;
+  } catch {
+    return 0;
+  }
+};
+
+const picked = (path, file, key) => path && { path, at: changedAt(file, key) };
+
 const pdfsIn = (dir) =>
   existsSync(dir) ? readdirSync(dir).filter((f) => f.toLowerCase().endsWith('.pdf')).sort().map((f) => join(dir, f)) : [];
 
@@ -61,7 +71,7 @@ const served = () => {
     .map((file) => ({ file, data: frontmatter(join(papersDir, file)) }))
     .sort((a, b) => Number(Boolean(b.data.jmp)) - Number(Boolean(a.data.jmp)));
   const paperEntries = papers.map(({ file, data }, i) => {
-    const field = fieldFile(data.pdf);
+    const field = picked(fieldFile(data.pdf), join(papersDir, file), 'pdf');
     if (data.jmp && i === 0) {
       const folder = folderFor('JMP');
       return { file, url: jmpUrl, candidates: [field, ...(folder ? pdfsIn(folder) : [])] };
@@ -76,13 +86,16 @@ const served = () => {
     const folder = folderFor(name);
     return { file, url, candidates: [field, ...(folder ? pdfsIn(folder) : [])] };
   });
-  return [{ url: cvUrl, candidates: [cv && join(cvDir, basename(cv)), ...pdfsIn(cvDir)] }, ...paperEntries];
+  return [{ url: cvUrl, candidates: [picked(cv && join(cvDir, basename(cv)), 'src/content/site.yaml', 'cv'), ...pdfsIn(cvDir)] }, ...paperEntries];
 };
 
 export const pdfSource = (url) =>
   [...(served().find((s) => s.url === url)?.candidates ?? []), join('public', url)]
-    .filter((p) => p && existsSync(p))
-    .sort((a, b) => committedAt(b) - committedAt(a))[0];
+    .filter(Boolean)
+    .map((c) => (typeof c === 'string' ? { path: c, at: 0 } : c))
+    .filter((c) => existsSync(c.path))
+    .map((c) => ({ ...c, at: Math.max(c.at, committedAt(c.path)) }))
+    .sort((a, b) => b.at - a.at)[0]?.path;
 
 export const servedUrls = () => [...new Set(served().map((s) => s.url))];
 

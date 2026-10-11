@@ -25,7 +25,7 @@ The site will rebuild itself either way using actions.
 | `public/` | Served as-is: fonts, favicon, etc. |
 
 ## How to do common edits
-- **New CV:** Media, then CV. Upload the PDF. That's it. Any file name works. It's always at lauranicolae.com/Nicolae_Laura_CV.pdf.
+- **New CV:** Name and contact, then CV. Remove the current file, upload the new PDF, select it, save. Any file name works. It's always at lauranicolae.com/Nicolae_Laura_CV.pdf. Uploading under Media, then CV, also works.
 - **Post the job market paper:** Media, then Paper PDFs, then the JMP folder. Upload the PDF. Any file name works. It's always at lauranicolae.com/Nicolae_JMP.pdf, so put that link on the title page. Update "Last updated" on the paper when you post a new version.
 - **Add a paper:** new entry, then set the section (working paper or publication), its position, and a short name, e.g. Bank_Deposits. Use a different short name for each paper. Then in Media, Paper PDFs, create a folder with the same name.
 - **Post a draft of any other paper:** Media, then Paper PDFs, then the paper's folder. Upload the PDF. If the paper still has an old Draft link under Links, remove it. It's always at lauranicolae.com/papers/Nicolae_ plus the short name, e.g. lauranicolae.com/papers/Nicolae_Bank_Deposits.pdf. Set the short name once and leave it, since changing it changes the link.
