@@ -10,6 +10,8 @@ const byOrder = (a: { data: { order: number } }, b: { data: { order: number } })
 const byId = (a: { id: string }, b: { id: string }) => Number(a.id) - Number(b.id);
 
 const papers = (await getCollection('papers')).sort(byOrder);
+const jmp = papers.find((p) => p.data.jmp);
+const jmpHref = jmp?.data.pdf ?? jmp?.data.links[0]?.url ?? '#jmp';
 const working = papers.filter((p) => p.data.type === 'working-paper');
 const published = papers.filter((p) => p.data.type === 'publication');
 const teaching = (await getCollection('teaching')).sort(byId);
@@ -33,7 +35,7 @@ const photo819 = await getImage({ src: site.photo, width: 819, format: 'jpg', qu
         <h1>{site.name}</h1>
         <p class="title">{site.title}<br>{site.affiliation}</p>
         {site.researchFields.length > 0 && <p class="fields">Fields: {site.researchFields.join(', ')}</p>}
-        <p class="contact"><a href={`mailto:${site.email}`}>{site.email}</a><Fragment set:html={copyButton(site.email)} /><br><a href={site.cv}>Curriculum Vitae</a></p>
+        <p class="contact"><a href={`mailto:${site.email}`}>{site.email}</a><Fragment set:html={copyButton(site.email)} /><br><a href={site.cv}>Curriculum Vitae</a>{jmp && <><br><a href={jmpHref}>Job Market Paper</a></>}</p>
         <span class="sr-only" role="status" aria-live="polite" data-copy-status></span>
       </div>
     </header>

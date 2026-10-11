@@ -15,21 +15,23 @@ const links = [
   ...d.links,
 ];
 const hasDetail = Boolean(d.updated || d.venue || links.length);
-const showMeta = d.jmp || hasDetail || Boolean(d.status);
+const showStatus = Boolean(d.status) && links.length === 0;
+const showMeta = hasDetail || showStatus;
 ---
-<article class="paper">
+<article class="paper" id={d.jmp ? 'jmp' : undefined}>
+  {d.jmp && <p class="meta jmp">Job Market Paper</p>}
   <h3>{d.title}</h3>
   {d.coauthors && <p class="meta">with {d.coauthors}</p>}
   {showMeta && (
-    <p class="meta">{d.jmp && <span class="jmp">Job Market Paper.</span>}{d.jmp && ' '}{
+    <p class="meta">{
       [
-        d.updated && `Last updated ${fmt(d.updated)}`,
-        d.venue && <><cite>{d.venue}</cite>{d.venueDate ? `, ${d.venueDate}` : ''}</>,
-        ...links.map((l) => <a href={l.url}>{l.label}</a>),
-      ].filter(Boolean).map((part, i) => <>{i > 0 && ' · '}{part}</>)
-    }{!hasDetail && d.status}</p>
+        d.updated && `Last updated ${fmt(d.updated)}.`,
+        d.venue && <><cite>{d.venue}</cite>{d.venueDate ? `, ${d.venueDate}` : ''}.</>,
+        showStatus && d.status,
+      ].filter(Boolean).map((part) => <> {part}</>)
+    }{links.map((l) => <> <a href={l.url}>{l.label}</a>.</>)}</p>
   )}
-  <details>
+  <details open={d.jmp}>
     <summary>Abstract</summary>
     <Content />
   </details>

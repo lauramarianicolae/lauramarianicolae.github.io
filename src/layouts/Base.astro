@@ -59,7 +59,7 @@ const year = new Date().getFullYear();
   <slot />
 
   <footer>
-    © {year} {site.name} · <span class="thanks">{site.thanks.map((t, i) => <span lang={t.lang} aria-hidden={i > 0 ? 'true' : undefined}>{t.text}</span>)}</span>
+    <span class="thanks">{site.thanks.map((t, i) => <span lang={t.lang} aria-hidden={i > 0 ? 'true' : undefined}>{t.text}</span>)}</span><br>© {year} {site.name}
   </footer>
 
   <script>import '../scripts/site.js';</script>

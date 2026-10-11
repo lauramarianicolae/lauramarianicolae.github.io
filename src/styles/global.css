@@ -184,9 +184,10 @@ h2 {
 }
 
 .paper + .paper { margin-top: 1.75rem; }
+.paper { scroll-margin-top: 4.5rem; }
 .paper h3 { font-size: 1.25rem; line-height: 1.35; margin-bottom: 0.25rem; }
 .meta { margin: 0 0 0.15rem; font-size: 1rem; color: var(--muted); }
-.jmp { color: var(--accent); }
+.jmp { color: var(--accent); font-weight: 500; }
 
 details { margin-top: 0.3rem; }
 summary {
