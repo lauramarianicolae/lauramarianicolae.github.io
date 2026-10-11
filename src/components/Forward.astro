@@ -1,0 +1,25 @@
+---
+interface Props { to: string; label: string }
+const { to, label } = Astro.props;
+const href = new URL(to, Astro.site ?? 'https://lauranicolae.com').href;
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{label}</title>
+  <meta name="robots" content="noindex">
+  <link rel="canonical" href={href}>
+  <meta http-equiv="refresh" content={`0;url=${to}`}>
+  <script is:inline define:vars={{ to }}>location.replace(to);</script>
+  <style is:global>
+    body { margin: 0; min-height: 100svh; display: grid; place-items: center; background: #f9fafb; font: 1.125rem/1.6 "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif; }
+    a { color: #1a1b1e; opacity: 0; animation: show 0s 1s forwards; }
+    @keyframes show { to { opacity: 1; } }
+  </style>
+</head>
+<body>
+  <a href={to}>{label}</a>
+</body>
+</html>
