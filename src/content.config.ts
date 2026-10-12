@@ -63,6 +63,8 @@ const site = defineCollection({
       cv: z.string().optional(),
       researchFields: z.array(z.string()).default([]),
       jobMarket: z.string().optional(),
+      almaMater: z.string().optional(),
+      profiles: z.array(z.string()).default([]),
       photo: image(),
       photoAlt: z.string(),
       description: z.string(),

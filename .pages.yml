@@ -196,6 +196,15 @@ content:
         label: Job market line
         type: string
         description: Shown at the bottom of the top section, under the CV and Job Market Paper links. Clear it when you're no longer on the market.
+      - name: almaMater
+        label: Alma mater
+        type: string
+        description: Where you received your undergraduate degree. Not shown on the page; it helps search engines.
+      - name: profiles
+        label: Other profiles
+        type: string
+        list: true
+        description: Full addresses of your own profiles elsewhere, e.g. your SSRN author page, Google Scholar, or LinkedIn. Not shown on the page; it helps search engines connect them to this site.
       - name: photo
         label: Photo
         type: string

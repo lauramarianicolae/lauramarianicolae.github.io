@@ -23,6 +23,8 @@ const jsonLd = {
   url: canonical,
   image: ogImage,
   knowsAbout: site.topics,
+  ...(site.almaMater && { alumniOf: { '@type': 'CollegeOrUniversity', name: site.almaMater } }),
+  ...(site.profiles.length > 0 && { sameAs: site.profiles }),
 };
 const year = new Date().getFullYear();
 ---
@@ -43,6 +45,7 @@ const year = new Date().getFullYear();
   <meta property="og:description" content={site.ogDescription}>
   <meta property="og:url" content={canonical}>
   <meta property="og:image" content={ogImage}>
+  <meta name="twitter:card" content="summary">
   </>}
 
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">

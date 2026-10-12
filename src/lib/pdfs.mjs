@@ -89,13 +89,25 @@ const served = () => {
   return [{ url: cvUrl, candidates: [picked(cv && join(cvDir, basename(cv)), 'src/content/site.yaml', 'cv'), ...pdfsIn(cvDir)] }, ...paperEntries];
 };
 
-export const pdfSource = (url) =>
+const pick = (url) =>
   [...(served().find((s) => s.url === url)?.candidates ?? []), join('public', url)]
     .filter(Boolean)
     .map((c) => (typeof c === 'string' ? { path: c, at: 0 } : c))
     .filter((c) => existsSync(c.path))
     .map((c) => ({ ...c, at: Math.max(c.at, committedAt(c.path)) }))
-    .sort((a, b) => b.at - a.at)[0]?.path;
+    .sort((a, b) => b.at - a.at)[0];
+
+export const pdfSource = (url) => pick(url)?.path;
+
+export const pdfUpdated = (url) => pick(url)?.at || 0;
+
+export const pageUpdated = () => {
+  try {
+    return Number(execFileSync('git', ['log', '-1', '--format=%ct', '--', 'src', ':(exclude)src/content/cv', ':(exclude)src/content/paper-pdfs'], { encoding: 'utf8' }).trim()) || 0;
+  } catch {
+    return 0;
+  }
+};
 
 export const servedUrls = () => [...new Set(served().map((s) => s.url))];
 
