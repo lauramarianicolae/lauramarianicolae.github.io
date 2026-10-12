@@ -192,6 +192,10 @@ content:
         label: Fields
         type: string
         list: true
+      - name: jobMarket
+        label: Job market line
+        type: string
+        description: Shown at the bottom of the top section, under the CV and Job Market Paper links. Clear it when you're no longer on the market.
       - name: photo
         label: Photo
         type: string
