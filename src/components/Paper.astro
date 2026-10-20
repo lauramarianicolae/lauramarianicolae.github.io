@@ -3,6 +3,7 @@ import { render } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import { basename } from 'node:path';
 import { paperPdfUrl } from '../lib/pdfs.mjs';
+import { arrow } from '../lib/arrow';
 
 interface Props { paper: CollectionEntry<'papers'> }
 const { paper } = Astro.props;
@@ -17,13 +18,14 @@ const links = [
   ...(pdfUrl ? [{ label: d.type === 'publication' ? 'Paper' : 'Draft', url: pdfUrl }] : []),
   ...d.links,
 ];
+const draft = d.jmp ? pdfUrl : undefined;
 const hasDetail = Boolean(d.updated || d.venue || links.length);
 const showStatus = Boolean(d.status) && links.length === 0;
 const showMeta = hasDetail || showStatus;
 ---
 <article class="paper" id={d.jmp ? 'jmp' : undefined}>
   {d.jmp && <p class="meta jmp">Job Market Paper</p>}
-  <h3>{d.title}</h3>
+  <h3>{draft ? <a class="title-link" href={draft}>{d.title}</a> : d.title}</h3>
   {d.coauthors && <p class="meta">with {d.coauthors}</p>}
   {showMeta && (
     <p class="meta">{
@@ -36,6 +38,6 @@ const showMeta = hasDetail || showStatus;
   )}
   <details open={d.jmp}>
     <summary>Abstract</summary>
-    <div class="abstract"><Content /></div>
+    <div class="abstract"><Content />{draft && <p class="more"><a class="go" href={draft}>Read the latest draft<Fragment set:html={arrow} /></a></p>}</div>
   </details>
 </article>
