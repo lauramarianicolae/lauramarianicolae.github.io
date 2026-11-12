@@ -3,7 +3,7 @@ title: Portfolio Substitution and the Effects of Bank Capital Regulation
 type: working-paper
 order: 1
 jmp: true
-updated: 2026-11-09
+updated: 2026-11-11
 pdf: /paper-pdfs/Nicolae_JMP-18.pdf
 shortName: JMP
 ---
